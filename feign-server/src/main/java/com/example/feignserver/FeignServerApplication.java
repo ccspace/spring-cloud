@@ -8,8 +8,12 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,14 +28,20 @@ public class FeignServerApplication {
 	@Autowired
 	Registration registration;
 
-	@RequestMapping("/upload")
+	@RequestMapping("/")
 	public ServiceInstance serviceInstance() {
 		List<ServiceInstance> list = client.getInstances(registration.getServiceId());
 		System.out.println("ip:" + list.get(0).getHost() + ",port:" + list.get(0).getPort());
 		return null;
 	}
 
+	@PostMapping(value = "/uploadFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String handleFileUpload(@RequestPart(value = "file") MultipartFile file) {
+		return file.getName();
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(FeignServerApplication.class, args);
 	}
+	
 }
