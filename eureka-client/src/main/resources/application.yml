@@ -1,0 +1,23 @@
+server:
+  port: 8762
+
+spring:
+  application:
+    name: eureka-client
+  profiles: peer1
+
+
+
+#启用客户端的健康检查,程序将自动向Eureka服务器注册
+eureka:
+  instance:
+      hostname: peer1
+      #metadata-map: zone1
+  client:
+    healthcheck:
+      enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    #prefer-same-zone-eureka: true
+
+
